@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Chatbot</h1>
+        <p class="subtitle">Skriv ett meddelande och få ett svar från databasen</p>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message bot-message">
+                <div class="text">Hej! Jag är en chatbot. Du kan ställa mig frågor och jag söker efter svar i min databas. Prova att skriva något!</div>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <input 
+                type="text" 
+                id="userInput" 
+                placeholder="Skriv ditt meddelande här..."
+                autocomplete="off"
+            >
+            <button onclick="sendMessage()">Skicka</button>
+        </div>
+
+        <div id="errorMessage" class="error" style="display: none;"></div>
+    </div>
+
