@@ -30,3 +30,73 @@
         <div id="errorMessage" class="error" style="display: none;"></div>
     </div>
 
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const errorMessage = document.getElementById('errorMessage');
+
+        userInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Skickar meddelandet till servern och visar svar
+        async function sendMessage() {
+            var message = userInput.value.trim();
+            if (!message) {
+                showError('Vänligen skriv något meddelande.');
+                return;
+            }
+
+            addMessage(message, 'user');
+            userInput.value = '';
+            errorMessage.style.display = 'none';
+
+            try {
+                var response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Server error');
+                }
+
+                var data = await response.json();
+                addMessage(data.response, 'bot');
+            } catch (err) {
+                console.error('Error:', err);
+                showError('Ett fel inträffade. Försök igen senare.');
+            }
+        }
+
+        // Skapar och lägger till ett meddelande i chatten
+        function addMessage(text, sender) {
+            var messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+
+            if (sender === 'user') {
+                messageDiv.className += ' user-message';
+            } else {
+                messageDiv.className += ' bot-message';
+            }
+
+            var textDiv = document.createElement('div');
+            textDiv.className = 'text';
+            textDiv.textContent = text;
+            messageDiv.appendChild(textDiv);
+
+            chatBox.appendChild(messageDiv);
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
